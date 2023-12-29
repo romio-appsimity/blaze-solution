@@ -1,5 +1,5 @@
 
 
-const Url = 'http://localhost:8000'; 
+const Url = 'https://blazesolu.onrender.com'; 
 
 export default Url;
