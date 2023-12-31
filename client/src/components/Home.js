@@ -92,13 +92,17 @@ function Home() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
+    document.querySelector('.loading-container').style.display = 'block';
+
     if (!validateForm()) {
-    
+      setLoading(false);
+      document.querySelector('.loading-container').style.display = 'none';
       return;
     }
     try {
-      setLoading(true);
-
+    
       const formData = new FormData();
       for (const key in userDetails) {
         formData.append(key, userDetails[key]);
@@ -153,6 +157,7 @@ function Home() {
       });
     } finally {
       setLoading(false); 
+      document.querySelector('.loading-container').style.display = 'none';
     }
   };
 
@@ -207,7 +212,9 @@ function Home() {
           <div className="col-md-8">
             <h3 className="contact-form-heading">Contact Us</h3>
             <form id="contactForm" className="contact-us" onSubmit={handleSubmit}>
-            {loading && <CircularProgress className="loader" />}
+            <div className="loading-container" style={{ display: 'none' }}>
+                  <CircularProgress className="loader" />
+                </div>
             <div className="row"> 
          <div className="col-md-8 form-right-border"> 
 		        <div className="form-row"> 
