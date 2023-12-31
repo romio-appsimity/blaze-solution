@@ -7,8 +7,10 @@ import { toast } from 'react-toastify';
 import 'tailwindcss/tailwind.css';
 import axios from 'axios';
 import Url from '../config/api';
-
+import CircularProgress from '@mui/material/CircularProgress';
 function Home() {
+
+  const [loading, setLoading] = useState(false);
 
   const [userDetails, setUserDetails] = useState({
     companyName: '',
@@ -95,6 +97,8 @@ function Home() {
       return;
     }
     try {
+      setLoading(true);
+
       const formData = new FormData();
       for (const key in userDetails) {
         formData.append(key, userDetails[key]);
@@ -147,11 +151,14 @@ function Home() {
         draggable: true,
        
       });
+    } finally {
+      setLoading(false); // Set loading to false when the submission completes (success or error)
     }
   };
 
     return (
       <div className="outer">
+        {loading && <CircularProgress className="loader" />}
       <div className="container-fluid">
         <div className="row top-navi">
           <div className="col-md-5">
@@ -200,7 +207,7 @@ function Home() {
           <div className="col-md-8">
             <h3 className="contact-form-heading">Contact Us</h3>
             <form id="contactForm" className="contact-us" onSubmit={handleSubmit}>
-           
+            {loading && <CircularProgress className="loader" />}
             <div className="row"> 
          <div className="col-md-8 form-right-border"> 
 		        <div className="form-row"> 
@@ -346,7 +353,9 @@ function Home() {
           </div>
         </div>
       </div>
-      
+     
+         
+       
     </div>
   );
 };
