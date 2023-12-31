@@ -25,11 +25,64 @@ function Home() {
     service:'signs'
     });
 
+    const [errors, setErrors] = useState({});
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUserDetails({ ...userDetails, [name]: value });
+   if (name === 'contactNumber' || name === 'postalCode') {
+      const numericValue = value.replace(/\D/g, ''); 
+      setUserDetails({ ...userDetails, [name]: numericValue });
+      setErrors({ ...errors, [name]: '' }); 
+    } else {
+      setUserDetails({ ...userDetails, [name]: value });
+      setErrors({ ...errors, [name]: '' });
+    }
   };
+  const validateForm = () => {
+    const newErrors = {};
 
+    const requiredFields = [
+      'companyName',
+      'firstName',
+      'lastName',
+      'address',
+      'city',
+      'province',
+      'postalCode',
+      'contactNumber',
+      'emailAddress',
+      'message',
+    ];
+
+    requiredFields.forEach((field) => {
+      if (!userDetails[field].trim()) {
+        newErrors[field] = 'This field is required';
+      }
+    });
+
+    if (!/^\d{10}$/.test(userDetails.contactNumber)) {
+      newErrors.contactNumber = 'Invalid contact number';
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userDetails.emailAddress)) {
+      newErrors.emailAddress = 'Invalid email address';
+    }
+
+    if (!/^\d{6}$/.test(userDetails.postalCode)) {
+      newErrors.postalCode = 'Invalid postal code';
+    }
+    if (!userDetails.file) {
+      newErrors.file = 'Please choose a file';
+    } else {
+     
+      const maxSize = 2 * 1024 * 1024;
+      if (userDetails.file.size > maxSize) {
+        newErrors.file = 'File size exceeds the limit of 2MB';
+      }
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; 
+  };
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setUserDetails({ ...userDetails, file });
@@ -37,6 +90,10 @@ function Home() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+    
+      return;
+    }
     try {
       const formData = new FormData();
       for (const key in userDetails) {
@@ -70,35 +127,28 @@ function Home() {
       document.getElementById('contactForm').reset();
 
       toast.success('Thank you for contacting us. We will get back to you soon!', {
-        position: 'top-right',
+        className: 'custom-toast',
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
+       
       });
-
-      
-     
-      //   window.location.reload();
-      
     } catch (error) {
       console.error('Error submitting contact:', error);
 
-      toast.error('Error submitting contact', {
-        position: 'top-right',
+      toast.error('Error submitting contact. Please try again later.', {
+        className: 'custom-toast',
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
+       
       });
-      
-        window.location.reload();
-     
     }
   };
-  
 
     return (
       <div className="outer">
@@ -155,19 +205,25 @@ function Home() {
          <div className="col-md-8 form-right-border"> 
 		        <div className="form-row"> 
 		          <div className="col-md-12">
-		            {/* <!-- <label for="cname">Company Name</label> --> */}
+              <span className="error-message" style={{ color: 'red' }}>
+                      {errors.companyName}
+                    </span>
 		              <input type="text" id="cname" name="companyName"  placeholder="Company Name"  value={userDetails.companyName}
               onChange={handleInputChange} />
 		           </div>   
 		        </div>
 		        <div className="form-row">  
 		            <div className="form-group col-md-6">  
-		               {/* <!--  <label for="fname">First Name</label> --> */}
+                <span className="error-message" style={{ color: 'red' }}>
+                      {errors.firstName}
+                    </span>
 		                <input type="text" id="fname" name="firstName" placeholder="First Name" value={userDetails.firstName} onChange={handleInputChange} />
 		             </div>   
 
 		           <div className="form-group col-md-6"> 
-		              {/* <!-- <label for="lname">Last Name</label> --> */}
+               <span className="error-message" style={{ color: 'red' }}>
+                      {errors.lastName}
+                    </span>
 		              <input type="text" id="lname" name="lastName" placeholder="Last Name" value={userDetails.lastName} onChange={handleInputChange} />
 		           </div>
 
@@ -176,12 +232,16 @@ function Home() {
 
 		       <div className="form-row">  
 		            <div className="form-group col-md-6">  
-		                {/* <!-- <label for="">Address</label> --> */}
+                <span className="error-message" style={{ color: 'red' }}>
+                      {errors.address}
+                    </span>
 		                <input type="text" id="" name="address" placeholder="Address" value={userDetails.address} onChange={handleInputChange} />
 		             </div>   
 
 		           <div className="form-group col-md-6"> 
-		            {/* <!--   <label for="">City</label> --> */}
+		           <span className="error-message" style={{ color: 'red' }}>
+                      {errors.city}
+                    </span>
 		              <input type="text" id="cit" name="city" placeholder="City"  value={userDetails.city} onChange={handleInputChange} />
 		           </div>
 
@@ -189,12 +249,16 @@ function Home() {
 
 		       <div className="form-row">  
 		            <div className="form-group col-md-6">  
-		                {/* <!-- <label for="">Province</label> --> */}
+                <span className="error-message" style={{ color: 'red' }}>
+                      {errors.province}
+                    </span>
 		                <input type="text" id="" name="province" placeholder="Province"  value={userDetails.province} onChange={handleInputChange}/>
 		             </div>   
 
 		           <div className="form-group col-md-6"> 
-		              {/* <!-- <label for="">Postal Code</label> --> */}
+               <span className="error-message" style={{ color: 'red' }}>
+                      {errors.postalCode}
+                    </span>
 		              <input type="text" id="pcode" name="postalCode" placeholder="Postal Code"  value={userDetails.postalCode} onChange={handleInputChange}/>
 		           </div>
 
@@ -202,12 +266,16 @@ function Home() {
 
 		       <div className="form-row">  
 		            <div className="form-group col-md-6">  
-		                {/* <!-- <label for="">Contact Number</label> --> */}
+                <span className="error-message" style={{ color: 'red' }}>
+                      {errors.contactNumber}
+                    </span>
 		                <input type="text" id="" name="contactNumber" placeholder="Contact Number" value={userDetails.contactNumber} onChange={handleInputChange} />
 		             </div>   
 
 		           <div className="form-group col-md-6"> 
-		            {/* <!--   <label for="">Email Address</label> --> */}
+               <span className="error-message" style={{ color: 'red' }}>
+                      {errors.emailAddress}
+                    </span>
 		              <input type="text" id="eadd" name="emailAddress" placeholder="Email Address" value={userDetails.emailAddress} onChange={handleInputChange} />
 		           </div>
 
@@ -215,7 +283,9 @@ function Home() {
 
 		        <div className="form-row"> 
 		          <div className="col-md-12"> 
-		              {/* <!-- <label for="cname">Message</label> --> */}
+              <span className="error-message" style={{ color: 'red' }}>
+                      {errors.message}
+                    </span>
 		              <textarea id="Message" name="message" placeholder="Message" style={{ height: '100px' }} value={userDetails.message}
               onChange={handleInputChange}></textarea>
 
@@ -224,7 +294,9 @@ function Home() {
 
 		          <div className="form-row"> 
 		            <div className="col-md-12"> 
-		              {/* <!-- <label for="u-file">Upload File</label> --> */}
+                <span className="error-message" style={{ color: 'red' }}>
+                      {errors.file}
+                    </span>
 		              <input type="file" class="form-control-file form-file" id="exampleFormControlFile1"  onChange={handleFileChange}/>
 		            </div>  
 		        </div>
@@ -274,6 +346,7 @@ function Home() {
           </div>
         </div>
       </div>
+      
     </div>
   );
 };
