@@ -222,27 +222,23 @@ form.contact-us h3 {
     z-index: 9999;
   }
   
-  .top-navi {
+  @media only screen and (max-width: 767px) {
+    .top-navi {
     padding: 10px 10px;
-}
-.logo img {
+    }
+    .logo img {
     width: 100%;
-}
-
-.logo-right-st h5 {
-    font-size: 18px;
-}
-.information-lk {
-    position: static;
-}
-
-.form-group input {
-    width: 100%;
-}
-
-.view-broch {
-    position: static;
-    text-align: center;
-    margin-top: 10px;
-    transform: translate(0);
-}
+    }
+    
+    .information-lk {
+        padding: 0px 10px;
+    }
+    .form-row {
+        display: inline;
+    }
+    .form-group input {
+        width: 100%;
+    }
+    
+    }
+    
