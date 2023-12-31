@@ -152,13 +152,13 @@ function Home() {
        
       });
     } finally {
-      setLoading(false); // Set loading to false when the submission completes (success or error)
+      setLoading(false); 
     }
   };
 
     return (
       <div className="outer">
-        {loading && <CircularProgress className="loader" />}
+       
       <div className="container-fluid">
         <div className="row top-navi">
           <div className="col-md-5">
