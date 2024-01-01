@@ -103,6 +103,7 @@ form.contact-us{
     font-size: 22px;
     border-bottom: 2px solid #ec2028;
     padding-bottom: 7px;
+    font-weight: 500;
 }
 /*.logo-right-st h5 b{color: #ea423a;}*/
 .top-navi {
@@ -241,7 +242,9 @@ form.contact-us h3 {
     .logo img {
     width: 100%;
     }
-    
+    .form-row {
+    display: inline;
+  }
     .information-lk {
         padding: 0px 10px;
     }
