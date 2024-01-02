@@ -136,7 +136,9 @@ form.contact-us{
     color: #e2272e;
     font-weight: 600;
     font-size: 32px;
-    font-style: italic;}
+    font-style: italic;
+    padding-bottom: 10px;
+}
 .information-lk li a span:hover{color:#667be3;}
 .db-btn {
     background: #f6f4f4;
