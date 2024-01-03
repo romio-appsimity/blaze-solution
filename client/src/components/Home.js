@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useRef } from 'react';
 import './style.css';
 import BlazeSignsLogo from '../imgs/Blaze-Signs-Logo (2).png';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -8,10 +8,22 @@ import 'tailwindcss/tailwind.css';
 import axios from 'axios';
 import Url from '../config/api';
 import CircularProgress from '@mui/material/CircularProgress';
+import emailjs from '@emailjs/browser';
 function Home() {
 
   const [loading, setLoading] = useState(false);
+  const form = useRef();
+  const sendEmail = (e) => {
+    e.preventDefault();
 
+    emailjs.sendForm('service_i0x1u2k', 'template_zfldb9s', form.current, 'fJk_kHwzx9KV2ZHC5')
+      .then((result) => {
+          console.log(result.text);
+         
+      }, (error) => {
+          console.log(error.text);
+      });
+  };
   const [userDetails, setUserDetails] = useState({
     companyName: '',
     firstName: '',
@@ -145,15 +157,14 @@ function Home() {
       for (const key in userDetails) {
         formData.append(key, userDetails[key]);
       }
-
-
+      
       const response = await axios.post(`${Url}/contact/contacts`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
-      console.log('Contact submitted successfully:', response.data);
+     
 
       setUserDetails({
         companyName: '',
@@ -182,7 +193,7 @@ function Home() {
        
       });
     } catch (error) {
-      console.error('Error submitting contact:', error);
+      
 
       toast.error('Error submitting contact. Please try again later.', {
         className: 'custom-toast',
@@ -249,7 +260,7 @@ function Home() {
 
           <div className="col-md-8">
             <h3 className="contact-form-heading">Contact Us</h3>
-            <form id="contactForm" className="contact-us" onSubmit={handleSubmit}>
+            <form id="contactForm" className="contact-us" onSubmit={(e) => { handleSubmit(e); sendEmail(e); }} ref={form} >
             <div className="loading-container" style={{ display: 'none' }}>
                   <CircularProgress className="loader" />
                 </div>
@@ -356,7 +367,7 @@ function Home() {
 		          <div className="form-row"> 
 		            <div className="col-md-12"> 
                
-		              <input type="file" class="form-control-file form-file" id="exampleFormControlFile1"  onChange={handleFileChange}/>
+		              <input type="file"  class="form-control-file form-file" id="exampleFormControlFile1"  onChange={handleFileChange}/>
                   <span className="error-message" style={{ color: 'red' }}>
                       {errors.file}
                     </span>
