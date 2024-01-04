@@ -16,6 +16,13 @@ function Home() {
   const sendEmail = (e) => {
     e.preventDefault();
 
+    const isValid = validateForm();
+
+    if (!isValid) {
+      
+      return;
+    }
+
     emailjs.sendForm('service_i0x1u2k', 'template_zfldb9s', form.current, 'fJk_kHwzx9KV2ZHC5')
       .then((result) => {
           console.log(result.text);
@@ -143,29 +150,30 @@ function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     document.querySelector('.loading-container').style.display = 'block';
-
-    if (!validateForm()) {
+  
+    const isValid = validateForm();
+  
+    if (!isValid) {
       setLoading(false);
       document.querySelector('.loading-container').style.display = 'none';
       return;
     }
+  
     try {
-    
       const formData = new FormData();
       for (const key in userDetails) {
         formData.append(key, userDetails[key]);
       }
-      
+  
+      // Submit the form
       const response = await axios.post(`${Url}/contact/contacts`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-
-     
-
+  
       setUserDetails({
         companyName: '',
         firstName: '',
@@ -178,11 +186,11 @@ function Home() {
         emailAddress: '',
         message: '',
         file: '',
-        service:'signs',
+        service: 'signs',
       });
-
+  
       document.getElementById('contactForm').reset();
-
+  
       toast.success('Thank you for contacting us. We will get back to you soon!', {
         className: 'custom-toast',
         autoClose: 3000,
@@ -190,11 +198,11 @@ function Home() {
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-       
       });
+  
+     
+      sendEmail(e);
     } catch (error) {
-      
-
       toast.error('Error submitting contact. Please try again later.', {
         className: 'custom-toast',
         autoClose: 5000,
@@ -202,14 +210,14 @@ function Home() {
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-       
       });
     } finally {
-      setLoading(false); 
+      setLoading(false);
       document.querySelector('.loading-container').style.display = 'none';
     }
   };
-
+  
+  
     return (
       <div className="outer">
        
@@ -260,7 +268,7 @@ function Home() {
 
           <div className="col-md-8">
             <h3 className="contact-form-heading">Contact Us</h3>
-            <form id="contactForm" className="contact-us" onSubmit={(e) => { handleSubmit(e); sendEmail(e); }} ref={form} >
+            <form id="contactForm" className="contact-us" onSubmit={(e) => handleSubmit(e)} ref={form}>
             <div className="loading-container" style={{ display: 'none' }}>
                   <CircularProgress className="loader" />
                 </div>
