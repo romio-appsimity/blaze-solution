@@ -375,7 +375,7 @@ function Home() {
 		          <div className="form-row"> 
 		            <div className="col-md-12"> 
                
-		              <input type="file"  class="form-control-file form-file" id="exampleFormControlFile1"  onChange={handleFileChange}/>
+		              <input type="file"  className="form-control-file form-file" id="exampleFormControlFile1"  onChange={handleFileChange}/>
                   <span className="error-message" style={{ color: 'red' }}>
                       {errors.file}
                     </span>
