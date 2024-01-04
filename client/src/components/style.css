@@ -186,12 +186,9 @@ form.contact-us h3 {
     flex-wrap: wrap;
     
   }
-  
   .form-group {
     width: 100%;
-    margin-bottom: 10px;
-    
-    
+    margin-bottom: 10px; 
   }
   
   .form-group input {
@@ -289,12 +286,7 @@ form.contact-us h3 {
       .logo1 img {
           width: 100%;
       }
-      .contact-outer-img {
-        width: 100%; 
-        height: auto; 
-        left: 0; 
-        bottom: 0; 
-    }
+      
       
       .db-btn {
           font-size: 13px;

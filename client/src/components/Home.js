@@ -12,6 +12,9 @@ import emailjs from '@emailjs/browser';
 function Home() {
 
   const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitButtonLabel, setSubmitButtonLabel] = useState("Submit");
+
   const form = useRef();
   const sendEmail = (e) => {
     e.preventDefault();
@@ -149,15 +152,23 @@ function Home() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+     if (submitting) {
+      return;
+    }
+    setSubmitting(true);
+  
     setLoading(true);
+    setSubmitButtonLabel("Submitting...");
   
     document.querySelector('.loading-container').style.display = 'block';
   
     const isValid = validateForm();
   
     if (!isValid) {
+      setSubmitting(false);
       setLoading(false);
       document.querySelector('.loading-container').style.display = 'none';
+      setSubmitButtonLabel("Submit"); 
       return;
     }
   
@@ -212,11 +223,13 @@ function Home() {
         draggable: true,
       });
     } finally {
-      setLoading(false);
+      setSubmitting(false);
+      setLoading(false); 
       document.querySelector('.loading-container').style.display = 'none';
+      setSubmitButtonLabel("Submit");
+     
     }
   };
-  
   
     return (
       <div className="outer">
@@ -418,7 +431,7 @@ function Home() {
 
 
 		        <div className="submit-s">      
-		              <input type="submit" value="Submit" />
+		              <input type="submit" value={submitButtonLabel} disabled={submitting} />
 		          </div> 
 		      </div>
 		  </div>                
