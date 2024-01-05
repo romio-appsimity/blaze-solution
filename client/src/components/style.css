@@ -250,6 +250,10 @@ form.contact-us h3 {
     .form-row {
         display: inline;
     }
+    .contact-outer-img {
+        background-image: url(../imgs/11.png);
+          display: none;
+       }
     .form-group input {
         width: 100%;
     }
@@ -296,6 +300,7 @@ form.contact-us h3 {
       
       
       }
+      
       @media only screen and (max-width: 1024px) {
         .top-navi {
           background: #edeef0;
@@ -307,10 +312,7 @@ form.contact-us h3 {
       .logo img {
           width: 100%;
       }
-      .information-lk {
-          left: 20px;
-          padding: 4px 8.5px;
-      }
+      
       
       .view-broch-inner {
           padding: 22px 10px;
@@ -319,6 +321,20 @@ form.contact-us h3 {
       .logo1 img {
           width: 100%;
       }
+
+      .information-lk li
+{font-size:15px;}
+
+.information-lk li span i
+{
+height: 28px;
+    line-height: 24px;
+    width: 28px;
+}
+.second-section {
+    padding: 10px 0;
+}
+
       
       .db-btn {
           font-size: 13px;
