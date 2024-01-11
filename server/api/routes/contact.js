@@ -44,10 +44,6 @@ router.post('/contacts', async (req, res) => {
       service,
     } = req.body;
 
-    if (!companyName || !firstName || !lastName || !emailAddress ) {
-      return res.status(400).json({ error: 'Please fill in all required fields.' });
-    }
-
     try {
       const newUser = new User({
         companyName,
@@ -61,8 +57,8 @@ router.post('/contacts', async (req, res) => {
         emailAddress,
         message,
         service,
-        file: req.file.buffer,
-        fileType: req.file.mimetype.split('/')[1],
+        file: req.file ? req.file.buffer : null,
+        fileType: req.file ? req.file.mimetype.split('/')[1] : null,
       });
 
       const savedUser = await newUser.save();

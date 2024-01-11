@@ -135,10 +135,7 @@ function Home() {
     if (!/^[A-Za-z]\d[A-Za-z] \d[A-Za-z]\d$/.test(userDetails.postalCode)) {
       newErrors.postalCode = 'Invalid postal code, Use ANA NAN format.';
     }
-    if (!userDetails.file) {
-      newErrors.file = 'Please choose a file';
-    } else {
-     
+    if (userDetails.file) {
       const maxSize = 2 * 1024 * 1024;
       if (userDetails.file.size > maxSize) {
         newErrors.file = 'File size exceeds the limit of 2MB';
@@ -402,7 +399,6 @@ function Home() {
 
 		      <h5>Please select the type
                   of service.</h5>  
-
                   <div className="form-check">
   <input
     type="radio"
@@ -445,7 +441,7 @@ function Home() {
       </div>
       <div className="row">
   <div className="social-outer">  
-    <div col-md-12>
+  <div className="col-md-12">
       <ul className="social-icons-bz">
         <li>
           <a href="https://www.facebook.com/YOUR_FACEBOOK_ID_OR_URL" target="_blank" rel="noopener noreferrer">

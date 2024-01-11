@@ -23,6 +23,7 @@ label{margin-bottom: 0px !important;}
 color: #333;
 
 }
+
 .right-submit-section h5{
     font-weight: 600;font-style: italic;font-size: 18px;
 }
@@ -280,6 +281,13 @@ form.contact-us h3 {
     }
     
     }
+    body, html {
+        overflow-x: hidden;
+      }
+      
+      .container-fluid {
+        overflow-x: hidden; 
+      }
     .loading-container {
         position: fixed;
         top: 50%;
