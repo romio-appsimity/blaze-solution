@@ -3,9 +3,11 @@ import './style.css';
 import BlazeSignsLogo from '../imgs/Blaze-Signs-Logo (2).png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
 import 'tailwindcss/tailwind.css';
 import axios from 'axios';
+import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import Url from '../config/api';
 import CircularProgress from '@mui/material/CircularProgress';
 import emailjs from '@emailjs/browser';
@@ -291,7 +293,7 @@ function Home() {
 		          <div className="col-md-12">
              
 		              <input type="text" id="cname" name="companyName"  placeholder="Company Name"  value={userDetails.companyName}
-              onChange={handleInputChange} />
+              onChange={handleInputChange}  />
                <span className="error-message" style={{ color: 'red' }}>
                       {errors.companyName}
                     </span>
@@ -438,9 +440,28 @@ function Home() {
       </form>
             <div className="contact-outer-img"></div>
           </div>
+         
         </div>
       </div>
-     
+      <div className="row">
+  <div className="social-outer">  
+    <div col-md-12>
+      <ul className="social-icons-bz">
+        <li>
+          <a href="https://www.facebook.com/YOUR_FACEBOOK_ID_OR_URL" target="_blank" rel="noopener noreferrer">
+            <FontAwesomeIcon icon={faFacebook} style={{ color: '#000', background: 'none', border: 'none' }} />
+          </a>
+        </li>
+        <li>
+          <a href="https://www.instagram.com/blazesolutions.inc" target="_blank" rel="noopener noreferrer">
+            <FontAwesomeIcon icon={faInstagram} style={{ color: '#000', background: 'none', border: 'none' }} />
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
          
        
     </div>
