@@ -243,6 +243,13 @@ form.contact-us h3 {
   width: 100%;
   padding: 12px;
 }
+.social-icons-bz {
+  list-style: none;
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  padding: 0;
+}
 .social-icons-bz li {
   display: inline-flex; 
   padding:0 5px;
