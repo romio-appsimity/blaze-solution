@@ -20,22 +20,46 @@ function Home() {
   const form = useRef();
   const sendEmail = (e) => {
     e.preventDefault();
-
+  
     const isValid = validateForm();
-
+  
     if (!isValid) {
-      
       return;
     }
-
-    emailjs.sendForm('service_i0x1u2k', 'template_zfldb9s', form.current, 'fJk_kHwzx9KV2ZHC5')
+  
+    let serviceContent;
+    if (userDetails.service === 'signs') {
+      serviceContent = 'Signs & Graphics';
+    } else if (userDetails.service === 'web') {
+      serviceContent = 'Web Development';
+    } else {
+      // Handle other services if needed
+      serviceContent = 'Other Service';
+    }
+  
+    const templateParams = {
+      companyName: userDetails.companyName,
+      firstName: userDetails.firstName,
+      lastName: userDetails.lastName,
+      address: userDetails.address,
+      city: userDetails.city,
+      province: userDetails.province,
+      postalCode: userDetails.postalCode,
+      contactNumber: userDetails.contactNumber,
+      emailAddress: userDetails.emailAddress,
+      message: userDetails.message,
+      service: serviceContent, 
+    };
+  
+    emailjs.send('service_i0x1u2k', 'template_zfldb9s', templateParams, 'fJk_kHwzx9KV2ZHC5')
       .then((result) => {
-          console.log(result.text);
-         
-      }, (error) => {
-          console.log(error.text);
+        console.log(result.text);
+      })
+      .catch((error) => {
+        console.log(error.text);
       });
   };
+  
   const [userDetails, setUserDetails] = useState({
     companyName: '',
     firstName: '',
@@ -53,21 +77,27 @@ function Home() {
 
     const [errors, setErrors] = useState({});
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    let formattedValue = value;
-
-    if (name === 'contactNumber') {
-     
-      const isBackspace = e.nativeEvent.inputType === 'deleteContentBackward';
-      formattedValue = formatPhoneNumber(value, isBackspace);
-    } else if (name === 'postalCode') {
-      formattedValue = formatPostalCode(value);
-    }
-  
-    setUserDetails({ ...userDetails, [name]: formattedValue });
-    setErrors({ ...errors, [name]: '' });
-  };
+    const handleInputChange = (e) => {
+      const { name, value, type } = e.target;
+    
+      if (type === 'radio') {
+        setUserDetails({ ...userDetails, [name]: value });
+      } else {
+        let formattedValue = value;
+    
+        if (name === 'contactNumber') {
+          const isBackspace = e.nativeEvent.inputType === 'deleteContentBackward';
+          formattedValue = formatPhoneNumber(value, isBackspace);
+        } else if (name === 'postalCode') {
+          formattedValue = formatPostalCode(value);
+        }
+    
+        setUserDetails({ ...userDetails, [name]: formattedValue });
+      }
+    
+      setErrors({ ...errors, [name]: '' });
+    };
+    
   const formatPhoneNumber = (input, isBackspace) => {
     let cleanedInput = input.replace(/\D/g, '');
   
@@ -300,7 +330,7 @@ const handleFileChange = (e) => {
 		          <div className="col-md-12">
              
 		              <input type="text" id="cname" name="companyName"  placeholder="Company Name"  value={userDetails.companyName}
-              onChange={handleInputChange} disabled={submitting}  />
+              onChange={handleInputChange} readOnly={submitting}   />
                <span className="error-message" style={{ color: 'red' }}>
                       {errors.companyName}
                     </span>
@@ -309,7 +339,7 @@ const handleFileChange = (e) => {
 		        <div className="form-row">  
 		            <div className="form-group col-md-6">  
                 
-		                <input type="text" id="fname" name="firstName" placeholder="First Name" value={userDetails.firstName} onChange={handleInputChange} disabled={submitting} />
+		                <input type="text" id="fname" name="firstName" placeholder="First Name" value={userDetails.firstName} onChange={handleInputChange} readOnly={submitting} />
                     <span className="error-message" style={{ color: 'red' }}>
                       {errors.firstName}
                     </span>
@@ -317,7 +347,7 @@ const handleFileChange = (e) => {
 
 		           <div className="form-group col-md-6"> 
                
-		              <input type="text" id="lname" name="lastName" placeholder="Last Name" value={userDetails.lastName} onChange={handleInputChange}disabled={submitting}  />
+		              <input type="text" id="lname" name="lastName" placeholder="Last Name" value={userDetails.lastName} onChange={handleInputChange} readOnly={submitting}   />
                   <span className="error-message" style={{ color: 'red' }}>
                       {errors.lastName}
                     </span>
@@ -329,7 +359,7 @@ const handleFileChange = (e) => {
 		       <div className="form-row">  
 		            <div className="form-group col-md-6">  
                 
-		                <input type="text" id="" name="address" placeholder="Address" value={userDetails.address} onChange={handleInputChange}  disabled={submitting} />
+		                <input type="text" id="" name="address" placeholder="Address" value={userDetails.address} onChange={handleInputChange} readOnly={submitting}  />
                     <span className="error-message" style={{ color: 'red' }}>
                       {errors.address}
                     </span>
@@ -337,7 +367,7 @@ const handleFileChange = (e) => {
 
 		           <div className="form-group col-md-6"> 
 		           
-		              <input type="text" id="cit" name="city" placeholder="City"  value={userDetails.city} onChange={handleInputChange} disabled={submitting} />
+		              <input type="text" id="cit" name="city" placeholder="City"  value={userDetails.city} onChange={handleInputChange} readOnly={submitting}  />
                   <span className="error-message" style={{ color: 'red' }}>
                       {errors.city}
                     </span>
@@ -348,7 +378,7 @@ const handleFileChange = (e) => {
 		       <div className="form-row">  
 		            <div className="form-group col-md-6">  
                 
-		                <input type="text" id="" name="province" placeholder="Province"  value={userDetails.province} onChange={handleInputChange} disabled={submitting}/>
+		                <input type="text" id="" name="province" placeholder="Province"  value={userDetails.province} onChange={handleInputChange} readOnly={submitting} />
                     <span className="error-message" style={{ color: 'red' }}>
                       {errors.province}
                     </span>
@@ -356,7 +386,7 @@ const handleFileChange = (e) => {
 
 		           <div className="form-group col-md-6"> 
               
-		              <input type="text" id="pcode" name="postalCode" placeholder="Postal Code"  value={userDetails.postalCode} onChange={handleInputChange} disabled={submitting}/>
+		              <input type="text" id="pcode" name="postalCode" placeholder="Postal Code"  value={userDetails.postalCode} onChange={handleInputChange} readOnly={submitting} />
                   <span className="error-message" style={{ color: 'red' }}>
                       {errors.postalCode}
                     </span>
@@ -367,7 +397,7 @@ const handleFileChange = (e) => {
 		       <div className="form-row">  
 		            <div className="form-group col-md-6">  
                 
-		                <input type="text" id="" name="contactNumber" placeholder="Contact Number" value={userDetails.contactNumber} onChange={handleInputChange}  disabled={submitting}/>
+		                <input type="text" id="" name="contactNumber" placeholder="Contact Number" value={userDetails.contactNumber} onChange={handleInputChange}  readOnly={submitting} />
                     <span className="error-message" style={{ color: 'red' }}>
                       {errors.contactNumber}
                     </span>
@@ -375,7 +405,7 @@ const handleFileChange = (e) => {
 
 		           <div className="form-group col-md-6"> 
               
-		              <input type="text" id="eadd" name="emailAddress" placeholder="Email Address" value={userDetails.emailAddress} onChange={handleInputChange} disabled={submitting} />
+		              <input type="text" id="eadd" name="emailAddress" placeholder="Email Address" value={userDetails.emailAddress} onChange={handleInputChange} readOnly={submitting}  />
                   <span className="error-message" style={{ color: 'red' }}>
                       {errors.emailAddress}
                     </span>
@@ -387,7 +417,7 @@ const handleFileChange = (e) => {
 		          <div className="col-md-12"> 
               
 		              <textarea id="Message" name="message" placeholder="Message" style={{ height: '100px' }} value={userDetails.message}
-              onChange={handleInputChange} disabled={submitting} ></textarea>
+              onChange={handleInputChange} readOnly={submitting}  ></textarea>
 <span className="error-message" style={{ color: 'red' }}>
                       {errors.message}
                     </span>
@@ -417,7 +447,7 @@ const handleFileChange = (e) => {
     name="service"
     checked={userDetails.service === 'signs'}
     onChange={() => handleInputChange({ target: { name: 'service', value: 'signs' } })}
-    disabled={submitting}
+    disabled={submitting} 
   />
   <label className="form-check-label" htmlFor="radio1">
     Signs & Graphics
@@ -431,7 +461,7 @@ const handleFileChange = (e) => {
     name="service"
     checked={userDetails.service === 'web'}
     onChange={() => handleInputChange({ target: { name: 'service', value: 'web' } })}
-    disabled={submitting}
+    disabled={submitting} 
   />
   <label className="form-check-label" htmlFor="radio2">
     Web Development
