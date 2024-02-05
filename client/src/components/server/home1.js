@@ -209,7 +209,20 @@ const handleFileChange = (e) => {
     }
   
     try {
-      sendEmail(e);
+      const formData = new FormData();
+      for (const key in userDetails) {
+        formData.append(key, userDetails[key]);
+      }
+  
+      for (let i = 0; i < userDetails.file.length; i++) {
+        formData.append("file", userDetails.file[i]);
+      }
+      
+      const response = await axios.post(`${Url}/contact/contacts`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
   
       setUserDetails({
         companyName: '',
@@ -238,7 +251,7 @@ const handleFileChange = (e) => {
       });
   
      
-      
+      sendEmail(e);
     } catch (error) {
       toast.error('Error submitting contact. Please try again later.', {
         className: 'custom-toast',
